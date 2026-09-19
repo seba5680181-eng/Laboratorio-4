@@ -32,4 +32,30 @@ def determinante(matriz):
     # |c d|  ->  ad - bc
     if n == 2:
         return matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0]
-    
+     # Para matrices mayores hacemos expansion por la primera fila.
+    det = 0
+
+    for columna in range(n):
+
+        # Construimos el menor:
+        # quitamos la primera fila y la columna actual.
+        menor = []
+
+        for fila in range(1, n):
+            fila_menor = []
+
+            for j in range(n):
+                if j != columna:
+                    fila_menor.append(matriz[fila][j])
+
+            menor.append(fila_menor)
+
+        # Signo del cofactor:
+        # + - + -
+        # - + - +
+        signo = (-1) ** columna
+
+        # Formula de expansion por cofactores.
+        det += signo * matriz[0][columna] * determinante(menor)
+
+    return det
