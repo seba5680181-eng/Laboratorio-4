@@ -193,3 +193,159 @@ def obtener_datos():
         )
 
 
+# ------------------------------------------------------------
+# 3. FUNCIONES DE LOS BOTONES
+# ------------------------------------------------------------
+
+def calcular():
+    """
+    Funcion ejecutada cuando se presiona el boton "Calcular".
+    """
+
+    try:
+        # Obtenemos A y b desde los campos de la GUI.
+        matriz, vector = obtener_datos()
+
+        # Aplicamos la Regla de Cramer.
+        soluciones, det_a = resolver_cramer(matriz, vector)
+
+        # Mostramos cada componente del vector x.
+        for i in range(4):
+            if i < len(soluciones):
+                entradas_x[i].delete(0, tk.END)
+                entradas_x[i].insert(0, formatear_numero(soluciones[i]))
+            else:
+                entradas_x[i].delete(0, tk.END)
+
+        # Tambien mostramos el determinante calculado.
+        entrada_determinante.delete(0, tk.END)
+        entrada_determinante.insert(0, formatear_numero(det_a))
+
+    except ValueError as error:
+        messagebox.showerror("Error", str(error))
+
+
+def calcular_determinante():
+    """
+    Funcion ejecutada cuando se presiona "Calcular det.".
+    Calcula solamente det(A).
+    """
+
+    try:
+        matriz, vector = obtener_datos()
+
+        det_a = determinante(matriz)
+
+        entrada_determinante.delete(0, tk.END)
+        entrada_determinante.insert(0, formatear_numero(det_a))
+
+    except ValueError as error:
+        messagebox.showerror("Error", str(error))
+
+
+def borrar_valores():
+    """
+    Borra todos los valores de A, b, x y el determinante.
+    """
+
+    # Borramos los valores de la matriz A.
+    for i in range(4):
+        for j in range(4):
+            entradas_a[i][j].delete(0, tk.END)
+
+    # Borramos b y x.
+    for i in range(4):
+        entradas_b[i].delete(0, tk.END)
+        entradas_x[i].delete(0, tk.END)
+
+    # Borramos el determinante.
+    entrada_determinante.delete(0, tk.END)
+
+    # Volvemos a actualizar el estado de los campos.
+    actualizar_dimension()
+
+
+def actualizar_dimension():
+    """
+    Activa solamente los campos correspondientes a la dimension
+    seleccionada.
+
+    Ejemplo:
+        2x2 -> usa A[1..2][1..2], b[1..2], x[1..2]
+        3x3 -> usa A[1..3][1..3], b[1..3], x[1..3]
+        4x4 -> usa todos los campos.
+    """
+
+    n = dimension.get()
+
+    for i in range(4):
+        for j in range(4):
+
+            if i < n and j < n:
+                # Campo utilizado por el sistema.
+                entradas_a[i][j].configure(state="normal")
+            else:
+                # Campo fuera de la dimension seleccionada.
+                entradas_a[i][j].delete(0, tk.END)
+                entradas_a[i][j].configure(state="disabled")
+
+        # Campos b y x.
+        if i < n:
+            entradas_b[i].configure(state="normal")
+            entradas_x[i].configure(state="normal")
+        else:
+            entradas_b[i].delete(0, tk.END)
+            entradas_x[i].delete(0, tk.END)
+
+            entradas_b[i].configure(state="disabled")
+            entradas_x[i].configure(state="disabled")
+
+
+def formatear_numero(numero):
+    """
+    Convierte un numero a texto de forma mas prolija.
+
+    Por ejemplo:
+        2.0 -> "2"
+        2.5 -> "2.5"
+    """
+
+    if abs(numero - round(numero)) < 1e-10:
+        return str(int(round(numero)))
+
+    return f"{numero:.6f}".rstrip("0").rstrip(".")
+
+
+# ------------------------------------------------------------
+# 4. CREACION DE LA VENTANA PRINCIPAL
+# ------------------------------------------------------------
+
+ventana = tk.Tk()
+
+ventana.title(
+    "Resolución de sistemas de ecuaciones lineales mediante la Regla de Cramer"
+)
+
+ventana.geometry("720x620")
+ventana.resizable(False, False)
+
+
+# ------------------------------------------------------------
+# 5. TITULO
+# ------------------------------------------------------------
+
+titulo = ttk.Label(
+    ventana,
+    text="Resolución de sistemas de ecuaciones lineales",
+    font=("Arial", 16, "bold")
+)
+
+titulo.pack(pady=(15, 3))
+
+subtitulo = ttk.Label(
+    ventana,
+    text="mediante la Regla de Cramer",
+    font=("Arial", 12)
+)
+
+subtitulo.pack(pady=(0, 15))
