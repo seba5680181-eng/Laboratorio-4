@@ -124,3 +124,72 @@ def resolver_cramer(matriz, vector):
         soluciones.append(x)
 
     return soluciones, det_a
+
+# ------------------------------------------------------------
+# 2. FUNCIONES PARA LEER LOS DATOS DE LA INTERFAZ
+# ------------------------------------------------------------
+
+def obtener_datos():
+    """
+    Lee los valores ingresados en la GUI y arma:
+
+        A = matriz de coeficientes
+        b = vector de terminos independientes
+
+    Solo se leen los campos correspondientes a la dimension
+    seleccionada.
+    """
+
+    n = dimension.get()
+
+    matriz = []
+    vector = []
+
+    try:
+        # Recorrer las filas de A.
+        for i in range(n):
+            fila = []
+
+            # Recorrer las columnas de A.
+            for j in range(n):
+
+                texto = entradas_a[i][j].get().strip()
+
+                # No permitimos campos vacios.
+                if texto == "":
+                    raise ValueError(
+                        f"Falta completar A[{i + 1}][{j + 1}]."
+                    )
+
+                # float permite ingresar enteros y decimales.
+                valor = float(texto)
+
+                fila.append(valor)
+
+            matriz.append(fila)
+
+            # Leer el termino independiente b.
+            texto_b = entradas_b[i].get().strip()
+
+            if texto_b == "":
+                raise ValueError(
+                    f"Falta completar b[{i + 1}]."
+                )
+
+            vector.append(float(texto_b))
+
+        return matriz, vector
+
+    except ValueError as error:
+        # Si el error fue producido por nosotros, mostramos su mensaje.
+        if str(error).startswith("Falta"):
+            raise error
+
+        # Si float() no pudo convertir el texto,
+        # mostramos un mensaje mas entendible.
+        raise ValueError(
+            "Todos los valores deben ser numeros.\n"
+            "Ejemplo: 5, -2, 3.5"
+        )
+
+
