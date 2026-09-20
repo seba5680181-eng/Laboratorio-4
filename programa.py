@@ -572,3 +572,20 @@ boton_determinante = ttk.Button(
 )
 
 boton_determinante.grid(row=0, column=2, padx=8)
+# ------------------------------------------------------------
+# 14. CONFIGURACION INICIAL
+# ------------------------------------------------------------
+
+# Al iniciar el programa queremos que aparezca seleccionada
+# la opcion 3x3 y que los campos 4x4 queden deshabilitados.
+actualizar_dimension()
+
+
+# ------------------------------------------------------------
+# 15. INICIO DEL PROGRAMA
+# ------------------------------------------------------------
+
+# mainloop() mantiene abierta la ventana y espera las acciones
+# del usuario: seleccionar dimension, escribir datos y pulsar
+# los botones.
+ventana.mainloop()
