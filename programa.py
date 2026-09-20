@@ -1,7 +1,8 @@
 # ============================================================
-# LABORATORIO IV - INFORMATICA II
+# LABORATORIO IV.1 - INFORMATICA II
 # Resolucion de sistemas de ecuaciones lineales
 # mediante la Regla de Cramer
+#Integrantes: Sebastian Vallejos, Cristian Toftum
 # URL GitHub: https://github.com/seba5680181-eng/Laboratorio-4
 # ============================================================
 
@@ -23,16 +24,17 @@ def determinante(matriz):
 
     n = len(matriz)
 
-    # Para determinante de una matriz 1x1.
+    # Caso base: determinante de una matriz 1x1.
     if n == 1:
         return matriz[0][0]
 
-    # Para 2x2:
+    # Caso 2x2:
     # |a b|
     # |c d|  ->  ad - bc
     if n == 2:
         return matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0]
-     # Para matrices mayores hacemos expansion por la primera fila.
+
+    # Para matrices mayores hacemos expansion por la primera fila.
     det = 0
 
     for columna in range(n):
@@ -59,6 +61,7 @@ def determinante(matriz):
         det += signo * matriz[0][columna] * determinante(menor)
 
     return det
+
 
 def reemplazar_columna(matriz, vector, columna):
     """
@@ -124,6 +127,7 @@ def resolver_cramer(matriz, vector):
         soluciones.append(x)
 
     return soluciones, det_a
+
 
 # ------------------------------------------------------------
 # 2. FUNCIONES PARA LEER LOS DATOS DE LA INTERFAZ
@@ -323,11 +327,11 @@ def formatear_numero(numero):
 ventana = tk.Tk()
 
 ventana.title(
-    "Resolución de sistemas de ecuaciones lineales mediante la Regla de Cramer"
-)
+    "Resolución de sistemas de ecuaciones lineales mediante la Regla de Cramer")
 
 ventana.geometry("720x620")
 ventana.resizable(False, False)
+
 
 
 # ------------------------------------------------------------
@@ -344,11 +348,12 @@ titulo.pack(pady=(15, 3))
 
 subtitulo = ttk.Label(
     ventana,
-    text="mediante la Regla de Cramer",
+    text="Autores: Vallejos, Sebastian - Larrea Toftum, Cristian",
     font=("Arial", 12)
 )
 
 subtitulo.pack(pady=(0, 15))
+
 
 
 # ------------------------------------------------------------
@@ -378,7 +383,7 @@ frame_dimension = ttk.LabelFrame(
 )
 
 frame_dimension.grid(
-    row=0,
+    row=2,
     column=0,
     rowspan=4,
     padx=(0, 30),
@@ -423,6 +428,7 @@ ttk.Label(
 ).grid(row=0, column=7, padx=8)
 
 
+
 # ------------------------------------------------------------
 # 10. CREACION DE LOS CAMPOS
 # ------------------------------------------------------------
@@ -442,7 +448,7 @@ for i in range(4):
     ttk.Label(
         frame_principal,
         text=str(i)
-    ).grid((row=i + 1)+1, column=1, padx=5)
+    ).grid(row=(i + 1)+1, column=1, padx=5)
 
     for j in range(4):
 
@@ -451,7 +457,7 @@ for i in range(4):
             ttk.Label(
                 frame_principal,
                 text=str(j)
-            ).grid(row=0, column=j + 2, padx=2)
+            ).grid(row=i+1, column=j + 2, padx=2)
 
         # Campo de entrada de A.
         entrada = ttk.Entry(
@@ -479,7 +485,7 @@ for i in range(4):
     )
 
     entrada_b.grid(
-        row=i + 1,
+        row=(i + 1) +1,
         column=6,
         padx=8,
         pady=3
@@ -495,7 +501,7 @@ for i in range(4):
     )
 
     entrada_x.grid(
-        row=i + 1,
+        row=(i + 1)+1,
         column=7,
         padx=8,
         pady=3
@@ -572,6 +578,8 @@ boton_determinante = ttk.Button(
 )
 
 boton_determinante.grid(row=0, column=2, padx=8)
+
+
 # ------------------------------------------------------------
 # 14. CONFIGURACION INICIAL
 # ------------------------------------------------------------
