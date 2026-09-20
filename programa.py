@@ -59,3 +59,68 @@ def determinante(matriz):
         det += signo * matriz[0][columna] * determinante(menor)
 
     return det
+
+def reemplazar_columna(matriz, vector, columna):
+    """
+    Crea una copia de la matriz A y reemplaza una de sus columnas
+    por el vector b.
+
+    Esto es justamente lo que necesitamos para aplicar Cramer:
+        x1 = det(A1) / det(A)
+        x2 = det(A2) / det(A)
+        ...
+    """
+
+    # Copiamos la matriz para no modificar la matriz original.
+    nueva_matriz = [fila[:] for fila in matriz]
+
+    # Reemplazamos la columna indicada por los valores de b.
+    for i in range(len(vector)):
+        nueva_matriz[i][columna] = vector[i]
+
+    return nueva_matriz
+
+
+def resolver_cramer(matriz, vector):
+    """
+    Resuelve el sistema A*x = b mediante la Regla de Cramer.
+
+    Devuelve:
+        - la solucion x
+        - el determinante de A
+    """
+
+    det_a = determinante(matriz)
+
+    # Si det(A) = 0, no podemos dividir por det(A).
+    # Ademas, el sistema no tiene una solucion unica.
+    if abs(det_a) < 1e-10:
+        raise ValueError(
+            "El determinante de A es 0.\n"
+            "La Regla de Cramer no permite obtener una solucion unica."
+        )
+
+    soluciones = []
+
+    # Para cada incognita:
+    # 1. Copiamos A.
+    # 2. Reemplazamos una columna por b.
+    # 3. Calculamos el nuevo determinante.
+    # 4. Aplicamos xi = det(Ai) / det(A).
+    for columna in range(len(matriz)):
+        matriz_reemplazada = reemplazar_columna(
+            matriz, vector, columna
+        )
+
+        det_ai = determinante(matriz_reemplazada)
+
+        x = det_ai / det_a
+
+        # Evitamos mostrar numeros como 1.9999999999999998
+        # cuando en realidad el resultado matematico es 2.
+        if abs(x) < 1e-10:
+            x = 0.0
+
+        soluciones.append(x)
+
+    return soluciones, det_a
