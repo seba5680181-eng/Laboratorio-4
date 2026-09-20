@@ -349,3 +349,226 @@ subtitulo = ttk.Label(
 )
 
 subtitulo.pack(pady=(0, 15))
+
+
+# ------------------------------------------------------------
+# 6. VARIABLE PARA ELEGIR LA DIMENSION
+# ------------------------------------------------------------
+
+# Comenzamos con 3x3, igual que en la imagen del enunciado.
+dimension = tk.IntVar(value=3)
+
+
+# ------------------------------------------------------------
+# 7. FRAME PRINCIPAL
+# ------------------------------------------------------------
+
+frame_principal = ttk.Frame(ventana, padding=10)
+frame_principal.pack()
+
+
+# ------------------------------------------------------------
+# 8. SELECCION DE DIMENSION
+# ------------------------------------------------------------
+
+frame_dimension = ttk.LabelFrame(
+    frame_principal,
+    text="Dimensión",
+    padding=10
+)
+
+frame_dimension.grid(
+    row=0,
+    column=0,
+    rowspan=4,
+    padx=(0, 30),
+    sticky="n"
+)
+
+
+# Creamos las opciones 2x2, 3x3 y 4x4.
+for valor in (2, 3, 4):
+    ttk.Radiobutton(
+        frame_dimension,
+        text=f"{valor} x {valor}",
+        variable=dimension,
+        value=valor,
+        command=actualizar_dimension
+    ).pack(anchor="w", pady=5)
+
+
+# ------------------------------------------------------------
+# 9. ENCABEZADOS DE LAS MATRICES
+# ------------------------------------------------------------
+
+# Etiqueta A.
+ttk.Label(
+    frame_principal,
+    text="A",
+    font=("Arial", 12, "bold")
+).grid(row=0, column=2, columnspan=4, pady=(0, 5))
+
+# Etiqueta b.
+ttk.Label(
+    frame_principal,
+    text="b",
+    font=("Arial", 12, "bold")
+).grid(row=0, column=6, padx=8)
+
+# Etiqueta x.
+ttk.Label(
+    frame_principal,
+    text="x",
+    font=("Arial", 12, "bold")
+).grid(row=0, column=7, padx=8)
+
+
+# ------------------------------------------------------------
+# 10. CREACION DE LOS CAMPOS
+# ------------------------------------------------------------
+
+# Estas listas guardan las cajas de texto.
+# De esta forma podemos acceder luego a cada valor.
+entradas_a = []
+entradas_b = []
+entradas_x = []
+
+for i in range(4):
+
+    # Lista para la fila i de la matriz A.
+    fila_entradas = []
+
+    # Numero de fila de A.
+    ttk.Label(
+        frame_principal,
+        text=str(i)
+    ).grid((row=i + 1)+1, column=1, padx=5)
+
+    for j in range(4):
+
+        # Numero de columna de A.
+        if i == 0:
+            ttk.Label(
+                frame_principal,
+                text=str(j)
+            ).grid(row=0, column=j + 2, padx=2)
+
+        # Campo de entrada de A.
+        entrada = ttk.Entry(
+            frame_principal,
+            width=7,
+            justify="center"
+        )
+
+        entrada.grid(
+            row=(i + 1)+1,
+            column=j + 2,
+            padx=2,
+            pady=3
+        )
+
+        fila_entradas.append(entrada)
+
+    entradas_a.append(fila_entradas)
+
+    # Campo del vector b.
+    entrada_b = ttk.Entry(
+        frame_principal,
+        width=7,
+        justify="center"
+    )
+
+    entrada_b.grid(
+        row=i + 1,
+        column=6,
+        padx=8,
+        pady=3
+    )
+
+    entradas_b.append(entrada_b)
+
+    # Campo del vector x.
+    entrada_x = ttk.Entry(
+        frame_principal,
+        width=7,
+        justify="center"
+    )
+
+    entrada_x.grid(
+        row=i + 1,
+        column=7,
+        padx=8,
+        pady=3
+    )
+
+    entradas_x.append(entrada_x)
+
+
+# ------------------------------------------------------------
+# 11. TEXTO DE AYUDA
+# ------------------------------------------------------------
+
+ayuda = ttk.Label(
+    ventana,
+    text=(
+        "Ayuda: el sistema de ecuaciones permite calcular A·x = b\n"
+        "Se deben cargar los valores de A y b y luego\n"
+        "al calcular, se obtienen los valores del vector x."
+    ),
+    justify="center"
+)
+
+ayuda.pack(pady=20)
+
+
+# ------------------------------------------------------------
+# 12. BOTONES
+# ------------------------------------------------------------
+
+frame_botones = ttk.Frame(ventana)
+frame_botones.pack(pady=5)
+
+boton_borrar = ttk.Button(
+    frame_botones,
+    text="Borrar valores",
+    command=borrar_valores
+)
+
+boton_borrar.grid(row=0, column=0, padx=8)
+
+boton_calcular = ttk.Button(
+    frame_botones,
+    text="Calcular",
+    command=calcular
+)
+
+boton_calcular.grid(row=0, column=1, padx=8)
+
+
+# ------------------------------------------------------------
+# 13. DETERMINANTE
+# ------------------------------------------------------------
+
+frame_det = ttk.Frame(ventana)
+frame_det.pack(pady=15)
+
+ttk.Label(
+    frame_det,
+    text="Determinante:"
+).grid(row=0, column=0, padx=5)
+
+entrada_determinante = ttk.Entry(
+    frame_det,
+    width=12,
+    justify="center"
+)
+
+entrada_determinante.grid(row=0, column=1, padx=8)
+
+boton_determinante = ttk.Button(
+    frame_det,
+    text="Calcular det.",
+    command=calcular_determinante
+)
+
+boton_determinante.grid(row=0, column=2, padx=8)
